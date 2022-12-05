@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto Gestor de Tareas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://kit.fontawesome.com/bfe47c94ff.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="code.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Proyecto de JQUERY</h1>
+    </header>
+    <main>
+        <div id="crear">
+                <input type="text" id="nuevaTarea" placeholder="What do you want me to remind you?">
+        </div>
+        <div id="recuento">
+            <hr>
+            <div id="listado">
+                <span><i class="fa-solid fa-chart-column"></i><span class="tareas actuales"></span> Tareas pendientes de un total de <span class="tareas totales"></span> | </span>
+                <button id="borrarTodo"><i class="fa-solid fa-circle-xmark"></i>  Borrar Tareas Completadas</button>
+            </div>
+            <hr>
+            <div id="lista">
+            </div>
+        </div>
+    </main>
+</html>

@@ -1,0 +1,79 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+:root{
+    font-size: 62.5%;
+}
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: #232223;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+header{
+    display: flex;
+    padding: 1rem;
+    font-size: 2rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+#crear{
+    display: flex;
+    justify-content: left;
+    align-items: left;
+}
+#crear input{
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+#recuento{
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+#listado >button{
+    color:#e19724;
+    background-color: #232223;
+    border: none;
+}
+#listado >button:hover{
+    color: #232223;
+    background-color: #e19724;
+}
+
+hr{
+    width: 100%;
+    border: 1px solid #313130;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.tarea{
+    width: 100%;
+    display: flex;   
+    flex-grow: 3;
+}
+.datos, .nombre{
+    display: flex;
+    gap: 1rem;
+}
+#lista{
+    background-color: red;
+}
+.borrar{
+    background-color: green;
+}
+.general{
+    background-color: blue;
+    min-width: 100%;
+    max-width: 100%;
+}
