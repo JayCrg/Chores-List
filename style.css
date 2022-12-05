@@ -60,20 +60,57 @@ hr{
 .tarea{
     width: 100%;
     display: flex;   
+    flex-direction: column;
     flex-grow: 3;
+    background-color: #303030;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: #424243 1px solid;
 }
 .datos, .nombre{
     display: flex;
     gap: 1rem;
 }
-#lista{
-    background-color: red;
-}
 .borrar{
-    background-color: green;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scale: 1.1;
+    margin-left: 0.5rem;
 }
-.general{
-    background-color: blue;
-    min-width: 100%;
-    max-width: 100%;
+.borrar:hover{
+    color: #e19724;
+}
+.aceptar{
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+.nombre{
+    flex-grow: 3;
+    font-size: 2rem;
+}
+.low, .mid, .high{
+    padding: 0.25rem;
+    font-size: 0.9rem;
+    border-radius: 2px;
+    border: #424243 1px solid;
+}
+.datos{
+    display: flex;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+}
+.fa-circle{
+    display:inline;
+}
+.fa-circle-check{
+    display: none;
+}
+.fa-circle.hecho{
+    display: none;
+}
+.fa-circle-check.hecho{
+    display:inline;
+    color: #19b186;
 }

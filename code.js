@@ -13,11 +13,19 @@ $(document).ready(function () {
         view.borrarTodo();
         mode.borrarTodo();
     });
-    $('#delete').click(function () {
-        console.log('click');
-        // view.borrarTarea($(this).parent());
-        // mode.borrarTarea($(this).parent().attr('id'));
-    });
+
+    //esto no va
+    // $('.borrar').click(function () {
+    //     console.log('click');
+    //     view.borrarTarea($(this).parent());
+    //     mode.borrarTarea($(this).parent().attr('id'));
+    // });
+    // $('.fa-circle').click(function () {
+    //     view.marcarComoHecho($(this));
+    // });
+    // $('.fa-circle-check.hecho').click(function () {
+    //     desmarcarComoHecho($(this));
+    // });
 
 });
 
@@ -67,15 +75,15 @@ class Vista {
         for(let i = 0; i < modelo.tareas.length; i++){
         tarea = modelo.tareas[i];
         $(`#lista`).append(`<div class="tarea ${tarea.getId()}" id="${tarea.getId()}">`);
-        $(`#${tarea.getId()}`).append(`<div class="general ${tarea.getId()}">`);
-        $(`.general.${tarea.getId()}`).append(`<div class="nombre ${tarea.getId()}">`);
+        $(`#${tarea.getId()}`).append(`<div class="aceptar ${tarea.getId()}">`);
+        $(`.aceptar.${tarea.getId()}`).append(`<div class="nombre ${tarea.getId()}">`);
         $(`.nombre.${tarea.getId()}`).append(`<i class="fa-regular fa-circle"></i><i class="fa-regular fa-circle-check"></i>`);
         $(`.nombre.${tarea.getId()}`).append(`<p>${tarea.getTexto()}</p>`);
-        $(`.general.${tarea.getId()}`).append(`<div class="datos ${tarea.getId()}">`);
-        $(`.datos.${tarea.getId()}`).append(`<p>Prioridad: <button class='low'><i class="fa-solid fa-caret-down"></i> Low</button> <button class='mid'>Mid</button> <button class='high'><i class="fa-sharp fa-solid fa-caret-up"></i> High</button></p>`);
+        $(`#${tarea.getId()}`).append(`<div class="datos ${tarea.getId()}">`);
+        $(`.datos.${tarea.getId()}`).append(`<p>Prioridad: </p><button class='low'><i class="fa-solid fa-caret-down"></i> Low</button> <button class='mid'>Normal</button> <button class='high'><i class="fa-sharp fa-solid fa-caret-up"></i> High</button>`);
         $(`.datos.${tarea.getId()}`).append(`<p><i class="fa-solid fa-clock"></i> ${tarea.getFechaHaceXTiempo()}</p>`);
-        $(`#${tarea.getId()}`).append(`<div class="borrar ${tarea.getId()}"></div>`);
-        $(`.borrar.${tarea.getId()}`).append(`<button id="delete"><i class="fa-solid fa-trash"></i></button>`);
+        $(`.aceptar.${tarea.getId()}`).append(`<div class="borrar ${tarea.getId()}">`);
+        $(`.borrar.${tarea.getId()}`).append(`<i class="fa-solid fa-trash"></i>`);
         }
 
         // $('.fa-check').click(function () {
@@ -90,11 +98,13 @@ class Vista {
     borrarTodo() {
         $('#lista').empty();
     }
-    marcarComoHecho(tarea) {
-        tarea.css('background-color', 'grey');
-        tarea.children('p').css('text-decoration', 'line-through');
-        tarea.children('i').css('visibility', 'visible');
-
+    marcarComoHecho(tick) {
+        tick.addClass('hecho');
+        tick.next('i').addClass('hecho');
+    }
+    desmarcarComoHecho(tick) {
+        tick.removeClass('hecho');
+        tick.prev('i').removeClass('hecho');
     }
 }
 
