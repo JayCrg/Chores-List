@@ -2,14 +2,17 @@ function efectos(tarea,mode, view){
     $(`.borrar.${tarea.getId()}`).click(function () {
         view.borrarDesdeBorrador($(this));
         mode.DesdeBorrador(view.getIdDesdeBorrador($(this)));
+        localStorage.setItem('tareas', JSON.stringify(mode.tareas));
     });
     $('.fa-circle').click(function () {
         view.marcarComoHecho($(this));
         mode.marcarComoHecho(view.getIdDesdeTick($(this)));
+        localStorage.setItem('tareas', JSON.stringify(mode.tareas));
     });
     $('.fa-circle-check').click(function () {
         view.desmarcarComoHecho($(this));
         mode.desmarcarComoHecho(view.getIdDesdeTick($(this)));
+        localStorage.setItem('tareas', JSON.stringify(mode.tareas));
     });
     view.actualizarActuales()
     view.actualizarTotales()
@@ -33,18 +36,23 @@ function botones(mode, view){
 };
 function reordenarVista(mode, view){
     mode.ordenarTareas();
-        view.borrarTodo();
-        for (let i = 0; i < mode.tareas.length; i++) {
-            let tarea = mode.tareas[i];
-            view.maquetarTareas(tarea);
-            efectos(tarea ,mode, view);
-            botones(mode, view);
-        }
+    view.borrarTodo();
+    for (let i = 0; i < mode.tareas.length; i++) {
+        let tarea = mode.tareas[i];
+        view.maquetarTareas(tarea);
+        efectos(tarea ,mode, view);
+        botones(mode, view);
+    }
+    localStorage.setItem('tareas', JSON.stringify(mode.tareas));
 }
 
 $(document).ready(function () {
     let mode = new Modelo();
     let view = new Vista();
+    if(localStorage.getItem('tareas') != null){
+        mode.leerLocalStorage();
+        reordenarVista(mode, view);
+    }
     $('input').keydown(function (e) {
         if (e.keyCode == 13) {//esto es para el enter
             view.borrarTodo();
@@ -55,6 +63,7 @@ $(document).ready(function () {
                 efectos(tarea ,mode, view);
                 botones(mode, view);
             }
+            console.log(mode.tareas)
             $('#nuevaTarea').val('');
         }
     });
@@ -91,6 +100,8 @@ class Modelo {
     }
     borrarTodo() {
         this.tareas = [];
+        localStorage.setItem('tareas', JSON.stringify(this.tareas));
+
     }
     getTarea(id) {
         for (let i = 0; i < this.tareas.length; i++) {
@@ -109,6 +120,17 @@ class Modelo {
     setPrioridad(id, prioridad) {
         let tarea = this.getTarea(id);
         tarea.prioridad = prioridad;
+    }
+    leerLocalStorage() {
+        let LStareas = JSON.parse(localStorage.getItem('tareas'));
+        let idAux = 0;
+        for (let i = 0; i < LStareas.length; i++) {
+            let nuevaTarea = new Tarea(LStareas[i].texto, LStareas[i].id, LStareas[i].prioridad, LStareas[i].hecho,  LStareas[i].fecha);
+            if (LStareas[i].id > idAux)
+                idAux = LStareas[i].id;
+                this.tareas.push(nuevaTarea);
+            }
+        this.id = idAux + 1;
     }
 }
 
@@ -191,11 +213,11 @@ class Vista {
 }
 
 class Tarea {
-    constructor(texto, id, prioridad = 3) {
+    constructor(texto, id, prioridad = 3, hecho = false, date = new Date()) {
         this.texto = texto;
-        this.fecha = new Date();
+        this.fecha = date;
         this.prioridad = prioridad;
-        this.hecho = false;
+        this.hecho = hecho;
         this.id = id;
     }
     cambiarPrioridad(prioridad) {
