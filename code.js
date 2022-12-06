@@ -1,19 +1,67 @@
+function efectos(tarea,mode, view){
+    $(`.borrar.${tarea.getId()}`).click(function () {
+        view.borrarDesdeBorrador($(this));
+        mode.DesdeBorrador(view.getIdDesdeBorrador($(this)));
+    });
+    $('.fa-circle').click(function () {
+        view.marcarComoHecho($(this));
+        mode.marcarComoHecho(view.getIdDesdeTick($(this)));
+    });
+    $('.fa-circle-check').click(function () {
+        view.desmarcarComoHecho($(this));
+        mode.desmarcarComoHecho(view.getIdDesdeTick($(this)));
+    });
+    view.actualizarActuales()
+    view.actualizarTotales()
+}
+function botones(mode, view){
+    $(`.low`).click(function () {
+        view.cambiarPrioridad($(this));
+        mode.setPrioridad($(this).parent().parent().attr('id'), 1)
+        reordenarVista(mode, view);
+    });
+    $(`.mid`).click(function () {
+        view.cambiarPrioridad($(this));
+        mode.setPrioridad($(this).parent().parent().attr('id'), 2)
+        reordenarVista(mode, view);
+    });
+    $(`.high`).click(function () {
+        view.cambiarPrioridad($(this));
+        mode.setPrioridad($(this).parent().parent().attr('id'), 3)
+        reordenarVista(mode, view);
+    });
+};
+function reordenarVista(mode, view){
+    mode.ordenarTareas();
+        view.borrarTodo();
+        for (let i = 0; i < mode.tareas.length; i++) {
+            let tarea = mode.tareas[i];
+            view.maquetarTareas(tarea);
+            efectos(tarea ,mode, view);
+            botones(mode, view);
+        }
+}
 
 $(document).ready(function () {
-    mode = new Modelo();
-    view = new Vista();
+    let mode = new Modelo();
+    let view = new Vista();
     $('input').keydown(function (e) {
         if (e.keyCode == 13) {//esto es para el enter
             view.borrarTodo();
-            tareaActual = mode.agregarTarea($('#nuevaTarea'));
-            view.maquetarTareas(mode);
+            mode.agregarTarea($('#nuevaTarea'));
+            for (let i = 0; i < mode.tareas.length; i++) {
+                let tarea = mode.tareas[i];
+                view.maquetarTareas(tarea);
+                efectos(tarea ,mode, view);
+                botones(mode, view);
+            }
+            $('#nuevaTarea').val('');
         }
     });
     $('#borrarTodo').click(function () {
         mode.borrarTodo();
         view.borrarTodo();
     });
-
 });
 
 
@@ -29,7 +77,7 @@ class Modelo {
         this.ordenarTareas();
         return nuevaTarea;
     }
-    borrarTarea(id) {
+    DesdeBorrador(id) {
         for (let i = 0; i < this.tareas.length; i++) {
             if (this.tareas[i].id == id) {
                 this.tareas.splice(i, 1);
@@ -68,58 +116,32 @@ class Vista {
     constructor() {
         this.div = $('#lista');
     }
-    maquetarTareas(modelo) {
-        let tarea
-        console.log(modelo.tareas);
-        for (let i = 0; i < modelo.tareas.length; i++) {
-            tarea = modelo.tareas[i];
-            $(`#lista`).append(`<div class="tarea ${tarea.getId()}" id="${tarea.getId()}">`);
-            $(`#${tarea.getId()}`).append(`<div class="aceptar ${tarea.getId()}">`);
-            $(`.aceptar.${tarea.getId()}`).append(`<div class="nombre ${tarea.getId()}">`);
-            $(`.nombre.${tarea.getId()}`).append(`<i class="fa-regular fa-circle"></i><i class="fa-regular fa-circle-check"></i>`);
-            $(`.nombre.${tarea.getId()}`).append(`<p>${tarea.getTexto()}</p>`);
-            $(`#${tarea.getId()}`).append(`<div class="datos ${tarea.getId()}">`);
-            $(`.datos.${tarea.getId()}`).append(`<p>Prioridad: </p><button class='low'><i class="fa-solid fa-caret-down"></i> Low</button> <button class='mid'>Normal</button> <button class='high'><i class="fa-sharp fa-solid fa-caret-up"></i> High</button>`);
-            $(`.datos.${tarea.getId()}`).append(`<p><i class="fa-solid fa-clock"></i> ${tarea.getFechaHaceXTiempo()}</p>`);
-            $(`.aceptar.${tarea.getId()}`).append(`<div class="borrar ${tarea.getId()}">`);
-            $(`.borrar.${tarea.getId()}`).append(`<i class="fa-solid fa-trash"></i>`);
-
-            $(`.borrar.${tarea.getId()}`).click(function () {
-                view.borrarTarea($(this).parent().parent());
-                mode.borrarTarea($(this).parent().parent().attr('id'));
-            });
-
-            $('.fa-circle').click(function () {
-                view.marcarComoHecho($(this));
-                modelo.marcarComoHecho($(this).parent().parent().parent().attr('id'));
-            });
-            $('.fa-circle-check').click(function () {
-                view.desmarcarComoHecho($(this));
-                modelo.desmarcarComoHecho($(this).parent().parent().parent().attr('id'));
-            });
-            $(`.low`).click(function () {
-                view.cambiarPrioridad($(this));
-                console.log($(this).parent().parent().attr('id'))
-                modelo.setPrioridad($(this).parent().parent().attr('id'), 1)
-                modelo.ordenarTareas();
-            });
-            $(`.mid`).click(function () {
-                view.cambiarPrioridad($(this));
-                modelo.setPrioridad($(this).parent().parent().attr('id'), 2)
-                modelo.ordenarTareas();
-            });
-            $(`.high`).click(function () {
-                view.cambiarPrioridad($(this));
-                modelo.setPrioridad($(this).parent().parent().attr('id'), 3)
-                modelo.ordenarTareas();
-            });
-
-            this.actualizarActuales()
-            this.actualizarTotales()
+    maquetarTareas(tarea) {
+        $(`#lista`).append(`<div class="tarea ${tarea.getId()}" id="${tarea.getId()}">`);
+        $(`#${tarea.getId()}`).append(`<div class="aceptar ${tarea.getId()}">`);
+        $(`.aceptar.${tarea.getId()}`).append(`<div class="nombre ${tarea.getId()}">`);
+        $(`.nombre.${tarea.getId()}`).append(`<i class="fa-regular fa-circle"></i><i class="fa-regular fa-circle-check"></i>`);
+        $(`.nombre.${tarea.getId()}`).append(`<p>${tarea.getTexto()}</p>`);
+        if (tarea.hecho) {
+            $(`.nombre.${tarea.getId()} p`).addClass('hecho');
+            $(`.nombre.${tarea.getId()} .fa-circle`).addClass('hecho');
+            $(`.nombre.${tarea.getId()} .fa-circle-check`).addClass('hecho');
         }
-
+        $(`#${tarea.getId()}`).append(`<div class="datos ${tarea.getId()}">`);
+        $(`.datos.${tarea.getId()}`).append(`<p>Prioridad: </p><button class='low'><i class="fa-solid fa-caret-down"></i> Low</button> <button class='mid'>Normal</button> <button class='high'><i class="fa-sharp fa-solid fa-caret-up"></i> High</button>`);
+        if (tarea.prioridad == 1) {
+            $(`.datos.${tarea.getId()} .low`).addClass('seleccionado');
+        } else if (tarea.prioridad == 2) {
+            $(`.datos.${tarea.getId()} .mid`).addClass('seleccionado');
+        } else if (tarea.prioridad == 3) {
+            $(`.datos.${tarea.getId()} .high`).addClass('seleccionado');
+        }
+        $(`.datos.${tarea.getId()}`).append(`<p><i class="fa-solid fa-clock"></i> ${tarea.getFechaHaceXTiempo()}</p>`);
+        $(`.aceptar.${tarea.getId()}`).append(`<div class="borrar ${tarea.getId()}">`);
+        $(`.borrar.${tarea.getId()}`).append(`<i class="fa-solid fa-trash"></i>`);
     }
-    borrarTarea(tarea) {
+    borrarDesdeBorrador(boton) {
+        let tarea = boton.parent().parent();
         tarea.remove();
         this.actualizarTotales();
         this.actualizarActuales();
@@ -146,14 +168,26 @@ class Vista {
         $('.totales').text(numero);
     }
     actualizarActuales() {
-        let numero= $('.tarea').length - $('.fa-circle-check.hecho').length;
+        let numero = $('.tarea').length - $('.fa-circle-check.hecho').length;
         $('.actuales').text(numero);
     }
     cambiarPrioridad(boton) {
         boton.parent().children().removeClass('seleccionado');
         boton.addClass('seleccionado');
     }
-
+    // reordenarTareas(boton, prioridad, modelo) {
+    // view.cambiarPrioridad($(boton));
+    // modelo.setPrioridad($(boton).parent().parent().attr('id'), prioridad)
+    // modelo.ordenarTareas();
+    // view.borrarTodo();
+    // view.maquetarTareas(modelo);
+    // }
+    getIdDesdeBorrador(boton) {
+        return boton.parent().parent().attr('id');
+    }
+    getIdDesdeTick(tick) {
+        return tick.parent().parent().parent().attr('id');
+    }
 }
 
 class Tarea {
