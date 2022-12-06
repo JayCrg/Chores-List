@@ -114,3 +114,26 @@ hr{
     display:inline;
     color: #19b186;
 }
+.nombre p.hecho{
+    text-decoration: line-through;
+    color: #19b186;
+}
+.fa-chart-column{
+    margin-right:1rem;
+}
+.datos button{
+    background-color: #454545;
+    color: #717170;
+}
+.low.seleccionado, .mid.seleccionado, .high.seleccionado{
+    color: white;
+}
+.low.seleccionado{
+    background-color: #3383be;
+}
+.mid.seleccionado{
+    background-color: #3f5875;
+}
+.high.seleccionado{
+    background-color: #cb5844;
+}
