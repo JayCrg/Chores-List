@@ -140,6 +140,7 @@ class Vista {
     }
     maquetarTareas(tarea) {
         $(`#lista`).append(`<div class="tarea ${tarea.getId()}" id="${tarea.getId()}">`);
+        $(`.tarea.${tarea.getId()}`).hide();
         $(`#${tarea.getId()}`).append(`<div class="aceptar ${tarea.getId()}">`);
         $(`.aceptar.${tarea.getId()}`).append(`<div class="nombre ${tarea.getId()}">`);
         $(`.nombre.${tarea.getId()}`).append(`<i class="fa-regular fa-circle"></i><i class="fa-regular fa-circle-check"></i>`);
@@ -161,6 +162,7 @@ class Vista {
         $(`.datos.${tarea.getId()}`).append(`<p><i class="fa-solid fa-clock"></i> ${tarea.getFechaHaceXTiempo()}</p>`);
         $(`.aceptar.${tarea.getId()}`).append(`<div class="borrar ${tarea.getId()}">`);
         $(`.borrar.${tarea.getId()}`).append(`<i class="fa-solid fa-trash"></i>`);
+        $(`.tarea.${tarea.getId()}`).toggle(250);
     }
     borrarDesdeBorrador(boton) {
         let tarea = boton.parent().parent();
