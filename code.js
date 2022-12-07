@@ -64,7 +64,6 @@ $(document).ready(function () {
                 botones(mode, view);
             }
             localStorage.setItem('tareas', JSON.stringify(mode.tareas));
-            console.log(mode.tareas)
             $('#nuevaTarea').val('');
         }
     });
