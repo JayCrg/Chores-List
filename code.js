@@ -63,6 +63,7 @@ $(document).ready(function () {
                 efectos(tarea ,mode, view);
                 botones(mode, view);
             }
+            localStorage.setItem('tareas', JSON.stringify(mode.tareas));
             console.log(mode.tareas)
             $('#nuevaTarea').val('');
         }
@@ -128,7 +129,7 @@ class Modelo {
             let nuevaTarea = new Tarea(LStareas[i].texto, LStareas[i].id, LStareas[i].prioridad, LStareas[i].hecho,  LStareas[i].fecha);
             if (LStareas[i].id > idAux)
                 idAux = LStareas[i].id;
-                this.tareas.push(nuevaTarea);
+            this.tareas.push(nuevaTarea);
             }
         this.id = idAux + 1;
     }
@@ -197,13 +198,6 @@ class Vista {
         boton.parent().children().removeClass('seleccionado');
         boton.addClass('seleccionado');
     }
-    // reordenarTareas(boton, prioridad, modelo) {
-    // view.cambiarPrioridad($(boton));
-    // modelo.setPrioridad($(boton).parent().parent().attr('id'), prioridad)
-    // modelo.ordenarTareas();
-    // view.borrarTodo();
-    // view.maquetarTareas(modelo);
-    // }
     getIdDesdeBorrador(boton) {
         return boton.parent().parent().attr('id');
     }
@@ -239,9 +233,7 @@ class Tarea {
         return this.fecha;
     }
     getFechaHaceXTiempo() {
-        let fecha = this.fecha;
-        let ahora = new Date();
-        let diferencia = ahora - fecha;
+        let diferencia = new Date() - new Date(this.fecha);
         let segundos = Math.floor(diferencia / 1000);
         let minutos = Math.floor(segundos / 60);
         let horas = Math.floor(minutos / 60);
