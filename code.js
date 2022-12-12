@@ -2,17 +2,17 @@ function efectos(tarea,mode, view){
     $(`.borrar.${tarea.getId()}`).click(function () {
         view.borrarDesdeBorrador($(this));
         mode.DesdeBorrador(view.getIdDesdeBorrador($(this)));
-        localStorage.setItem('tareas', JSON.stringify(mode.tareas));
+        mode.actualizarLocalStorage()
     });
     $('.fa-circle').click(function () {
         view.marcarComoHecho($(this));
         mode.marcarComoHecho(view.getIdDesdeTick($(this)));
-        localStorage.setItem('tareas', JSON.stringify(mode.tareas));
+        mode.actualizarLocalStorage()
     });
     $('.fa-circle-check').click(function () {
         view.desmarcarComoHecho($(this));
         mode.desmarcarComoHecho(view.getIdDesdeTick($(this)));
-        localStorage.setItem('tareas', JSON.stringify(mode.tareas));
+        mode.actualizarLocalStorage()
     });
     view.actualizarActuales()
     view.actualizarTotales()
@@ -43,7 +43,7 @@ function reordenarVista(mode, view){
         efectos(tarea ,mode, view);
         botones(mode, view);
     }
-    localStorage.setItem('tareas', JSON.stringify(mode.tareas));
+    mode.actualizarLocalStorage()
 }
 
 $(document).ready(function () {
@@ -63,13 +63,14 @@ $(document).ready(function () {
                 efectos(tarea ,mode, view);
                 botones(mode, view);
             }
-            localStorage.setItem('tareas', JSON.stringify(mode.tareas));
+            mode.actualizarLocalStorage()
             $('#nuevaTarea').val('');
         }
     });
-    $('#borrarTodo').click(function () {
-        mode.borrarTodo();
-        view.borrarTodo();
+    $('#borrarCompletadas').click(function () {
+        mode.borrarCompletadas();
+        view.borrarCompletadas();
+        mode.actualizarLocalStorage()
     });
 });
 
@@ -100,7 +101,7 @@ class Modelo {
     }
     borrarTodo() {
         this.tareas = [];
-        localStorage.setItem('tareas', JSON.stringify(this.tareas));
+        this.actualizarLocalStorage()
 
     }
     getTarea(id) {
@@ -131,6 +132,12 @@ class Modelo {
             this.tareas.push(nuevaTarea);
             }
         this.id = idAux + 1;
+    }
+    borrarCompletadas() {
+        this.tareas = this.tareas.filter(tarea => !tarea.hecho);
+    }
+    actualizarLocalStorage() {
+        localStorage.setItem('tareas', JSON.stringify(this.tareas));
     }
 }
 
@@ -174,6 +181,11 @@ class Vista {
         $('#lista').empty();
         this.actualizarActuales(0);
         this.actualizarTotales(0);
+    }
+    borrarCompletadas(){
+        $('.fa-circle-check.hecho').parent().parent().parent().remove();
+        this.actualizarActuales();
+        this.actualizarTotales();
     }
     marcarComoHecho(tick) {
         tick.addClass('hecho');
